@@ -1,5 +1,4 @@
 import unittest
-import dictionary
 from google.cloud import translate_v2 as translate
 from google.oauth2 import service_account
 
@@ -23,6 +22,7 @@ class DictionaryTestCase(unittest.TestCase):
         from lxml import html
         page = requests.get('https://dictionary.cambridge.org/dictionary/english-chinese-traditional/jeopardy')
         tree = html.fromstring(page.content)
-        print(tree)
+
+
 if __name__ == '__main__':
     unittest.main()

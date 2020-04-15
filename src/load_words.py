@@ -1,9 +1,8 @@
 from google.cloud import translate_v2 as translate
 from google.oauth2 import service_account
 
-from dictionary import Cambridge
+from src.dictionary import Cambridge
 
-import sqlite3
 
 def load_words_from_txt_google_translate():
     credentials = service_account.Credentials.from_service_account_file(
@@ -11,7 +10,7 @@ def load_words_from_txt_google_translate():
     )
     translate_client = translate.Client(credentials=credentials)
 
-    with open('words/source/the golden bough.txt', 'r') as reader, open('words/dictionary/the golden bough.csv', 'w') as writer:
+    with open('../words/source/the golden bough.txt', 'r') as reader, open('words/cards/the golden bough.csv', 'w') as writer:
         for line in reader.readlines():
             text = line.strip('\n')
             result = translate_client.translate(
@@ -25,7 +24,7 @@ def load_words_from_txt_google_translate():
 def load_words_from_txt_web_scraper():
 
     # load word list from words directory, and write translated text into csv file and database
-    with open('words/source/the golden bough.txt', 'r') as reader, open('words/dictionary/the golden bough.csv', 'w') as writer:
+    with open('../words/source/the golden bough.txt', 'r') as reader, open('words/cards/the golden bough.csv', 'w') as writer:
         dictionary = Cambridge()
 
         for line in reader.readlines():
