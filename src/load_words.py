@@ -19,20 +19,3 @@ def load_words_from_txt_google_translate():
             output = '{}'.format(result['input'].lower())
             output += ',{}'.format(result['translatedText'])
             writer.write(output + '\n')
-
-
-def load_words_from_txt_web_scraper():
-
-    # load word list from words directory, and write translated text into csv file and database
-    with open('../words/source/the golden bough.txt', 'r') as reader, open('words/cards/the golden bough.csv', 'w') as writer:
-        dictionary = Cambridge()
-
-        for line in reader.readlines():
-            text = line.strip('\n')
-            pronunciation, translated_text, examples = dictionary.translate(text)
-            output = text.lower() + ',"' + ';'.join(pronunciation) + '","' + ';'.join(translated_text) + '","' + ';'.join(examples) + '"\n'
-            writer.write(output)
-
-
-if __name__ == '__main__':
-    load_words_from_txt_web_scraper()
