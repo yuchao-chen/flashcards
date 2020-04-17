@@ -8,7 +8,7 @@ class Recorder:
             cls.instance = super(Recorder, cls).__new__(cls)
             cls.instance.conn = None
             cls.instance.cursor = None
-            cls.instance.connect('../data/cardbox')
+            cls.instance.connect('data/cardbox')
             cls.instance.create_record_tables()
         return cls.instance
 

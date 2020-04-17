@@ -14,5 +14,6 @@ class CardBoxTestCase(unittest.TestCase):
                 card.word = text.lower()
 
 
+
 if __name__ == '__main__':
     unittest.main()

@@ -16,11 +16,6 @@ class CardBox:
         return self.instance._cards
 
     @cards.setter
-    def cards(self, words_list):
-        for key in words_list:
-            book = key
-            for word in words_list[key]:
-                new_card = Card()
-                new_card.book = book
-                new_card.word = word
-                self.instance._cards[new_card.word] = new_card
+    def cards(self, cards0):
+        self.instance._cards = cards0
+        print(self.instance._cards)
