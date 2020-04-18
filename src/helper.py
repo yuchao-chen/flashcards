@@ -4,10 +4,12 @@ from os.path import isfile, join, splitext
 #from google.cloud import translate_v2 as translate
 #from google.oauth2 import service_account
 
-from src.card_box import CardBox, Card
+from src.card_box import CardBox
+from src.card import Card
+
 
 def load_word_list():
-    srcdir = 'data/source'
+    srcdir = '../data/source'
     files = [f for f in listdir(srcdir) if isfile(join(srcdir, f))]
     cards = {}
     for file in files:

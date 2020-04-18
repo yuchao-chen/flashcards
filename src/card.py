@@ -27,39 +27,62 @@ class Card:
             self._book_id = record.save_book(bookname)
 
     @property
+    def card_id(self):
+        return self._card_id
+
+    @card_id.setter
+    def card_id(self, id):
+        self._card_id = id
+
+    @property
+    def ipa(self):
+        return self._ipa
+
+    @ipa.setter
+    def ipa(self, ipa0):
+        self._ipa = ipa0
+
+    @property
+    def definition(self):
+        return self._def
+
+    @definition.setter
+    def definition(self, defs):
+        self._def = defs
+
+    @property
+    def translation(self):
+        return self._trans
+
+    @translation.setter
+    def translation(self, trans):
+        self._trans = trans
+
+    @property
+    def examples(self):
+        return self._examples
+
+    @examples.setter
+    def examples(self, egs):
+        self._examples = egs
+
+    @property
     def word(self):
         return self._word
 
     @word.setter
     def word(self, wordname):
+        self._word = wordname
         record = Recorder()
         # check if word exists in recordings
         if record.check_exists_in_record('card', 'word', wordname):
-            self._word = wordname
-            self._card_id = record.query_card_id(wordname)
+            self.card_id, self.ipa, self.definition, self.translation = record.query_card(wordname)
+            self.examples = record.query_examples(self.card_id)
         else:
             # if not found in the record, lookup the dictionary
-            self._word = wordname
             dictionary = Cambridge()
-            self._ipa, self._def, self._trans, self._examples = dictionary.lookup(self._word)
+            self.ipa, self.definition, self.translation, self.examples = dictionary.lookup(self._word)
             # store the data in the record
-            self._card_id = record.save_card(self._word, self._book_id, self._ipa, self._def, self._trans)
-            record.save_examples(self._examples, self._card_id)
+            self.card_id = record.save_card(self.word, self.book_id, self.ipa, self.definition, self.translation)
+            record.save_examples(self.examples, self.card_id)
 
-
-#import sys
-#from PyQt5 import QtWidgets
-#
-#
-#def main():
-#    app = QtWidgets.QApplication(sys.argv)
-#    window = QtWidgets.QMainWindow()
-#    button = QtWidgets.QPushButton("Hello, PyQt!")
-#    window.setCentralWidget(button)
-#    window.show()
-#    app.exec_()
-#
-#
-#if __name__ == '__main__':
-#    main()
-#

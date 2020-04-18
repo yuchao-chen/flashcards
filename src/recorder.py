@@ -8,7 +8,7 @@ class Recorder:
             cls.instance = super(Recorder, cls).__new__(cls)
             cls.instance.conn = None
             cls.instance.cursor = None
-            cls.instance.connect('data/cardbox')
+            cls.instance.connect('../data/cardbox')
             cls.instance.create_record_tables()
         return cls.instance
 
@@ -101,6 +101,12 @@ class Recorder:
             return result[0]
         return None
 
+    def query_card(self, word):
+        sql = '''
+            SELECT _id, ipa, def, trans FROM card WHERE word = "{}";
+        '''.format(word)
+        return self.query_one(sql)
+
     def save_examples(self, examples, card_id):
         example_sql = '''
             INSERT INTO example (card_id, sentence, trans) VALUES ({}, ?, ?);
@@ -110,6 +116,16 @@ class Recorder:
             self.instance.conn.commit()
         except sqlite3.Error as e:
             raise Exception('Fail to save examples: ' + example_sql + '{}'.format(e))
+
+    def query_examples(self, card_id):
+        query_sql = '''
+            SELECT sentence, trans FROM example WHERE card_id = {};
+        '''.format(card_id)
+        try:
+            self.instance.cursor.execute(query_sql)
+            return self.instance.cursor.fetchmany()
+        except sqlite3.Error as e:
+            raise Exception('Fail to query: ' + query_sql + '{}'.format(e))
 
     def query_one(self, sql):
         try:
