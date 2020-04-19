@@ -7,10 +7,21 @@ class CircularList:
         self._buf = []
         self._count = 0
 
+    @property
     def next(self):
         if self._buf is None:
             return None
         self._count = (self._count + 1) % len(self._buf)
+        return self._buf[self._count]
+
+    @property
+    def prev(self):
+        if self._buf is None:
+            return None
+        if self._count == 0:
+            self._count = len(self._buf) - 1
+        else:
+            self._count -= 1
         return self._buf[self._count]
 
     def append(self, o):
@@ -39,8 +50,13 @@ class CardBox:
         for key in cards0:
             self.instance._keys.append(key)
 
-    def draw(self):
-        key = self.instance._keys.next()
+    def draw(self, reverse=False):
+        key = None
+        if reverse:
+            key = self.instance._keys.prev
+        else:
+            key = self.instance._keys.next
+
         if key is not None:
             return self.instance._cards[key]
         return None

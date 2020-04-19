@@ -23,7 +23,7 @@ class CardUI(QtWidgets.QWidget):
         self._word.setAlignment(QtCore.Qt.AlignCenter)
         font = self._word.font()
         font.setBold(True)
-        font.setPointSize(38)
+        font.setPointSize(50)
         self._word.setFont(font)
         self._ipa = QtWidgets.QLabel('IPA')
         self._ipa.setAlignment(QtCore.Qt.AlignCenter)
@@ -40,10 +40,10 @@ class CardUI(QtWidgets.QWidget):
         self.setLayout(self._word_layout)
 
         self.setSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        self.setMinimumSize(256, 256)
+        self.setMinimumSize(350, 350)
         self.show_labels()
 
-    def mouseReleaseEvent(self, a0: QtGui.QMouseEvent) -> None:
+    def change_display_contents(self):
         if not self._word.isHidden():
             self.show_labels(False, False, True, False, False)
         elif not self._def.isHidden():
@@ -53,6 +53,9 @@ class CardUI(QtWidgets.QWidget):
         else:
             self.show_labels(True, True, False, False, False)
         self.update()
+
+    def mouseReleaseEvent(self, a0: QtGui.QMouseEvent) -> None:
+        self.change_display_contents()
         super(CardUI, self).mouseReleaseEvent(a0)
 
     def show_labels(self, word=True, ipa=True, defs=False, trans=False, examples=False):
@@ -86,15 +89,30 @@ class CardUI(QtWidgets.QWidget):
         self._word.setText(card.word)
         #self._ipa.setText('| ' + card.ipa.replace(';', ' | | ') + ' |')
         self._ipa.setText(card.ipa)
-        self._def.setText(card.definition.replace(';', '.\n'))
-        self._trans.setText(card.translation)
+        self._def.setText(card.definition.replace(';', '.\n\n'))
+        self._trans.setText(card.translation.replace(';', '\n'))
+        if card.examples is not None:
+            label = ''
+            for ig, trans in card.examples:
+                print(ig)
+                print(trans)
+                label += '<span style="font-weight:bold;">' + ig + '</span><br>'
+                label += trans
+            self._examples.setText(label)
+        #self._examples.setText('\n'.join(card.examples))
         self.update()
 
     def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
-        if a0.key() in [QtCore.Qt.Key_Left, QtCore.Qt.Key_Up]:
+        if a0.key() == QtCore.Qt.Key_Left:
             self.draw_card(reverse=True)
-        elif a0.key() in [QtCore.Qt.Key_Right, QtCore.Qt.Key_Down]:
+            self.show_labels()
+        elif a0.key() == QtCore.Qt.Key_Right:
             self.draw_card()
+            self.show_labels()
+        elif a0.key() == QtCore.Qt.Key_Up:
+            self.change_display_contents()
+        elif a0.key() == QtCore.Qt.Key_Down:
+            self.change_display_contents()
         else:
             super().keyPressEvent(a0)
 
