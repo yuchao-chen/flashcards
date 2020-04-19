@@ -35,4 +35,4 @@ class Cambridge(Dictionary):
             examples.append(content.text_content())
 
         translated_examples = tree.xpath('//span[@class="trans dtrans dtrans-se hdb"]/text()')
-        return ';'.join(pronunciation), ';'.join(definition), ';'.join(translated_text), zip(examples, translated_examples)
+        return '\t'.join(pronunciation), '\t'.join(definition), '\t'.join(translated_text), zip(examples, translated_examples)

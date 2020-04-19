@@ -88,18 +88,16 @@ class CardUI(QtWidgets.QWidget):
 
         self._word.setText(card.word)
         #self._ipa.setText('| ' + card.ipa.replace(';', ' | | ') + ' |')
-        self._ipa.setText(card.ipa)
-        self._def.setText(card.definition.replace(';', '.\n\n'))
-        self._trans.setText(card.translation.replace(';', '\n'))
+        if card.ipa is not None:
+            self._ipa.setText(card.ipa)
+        self._def.setText(card.definition.replace('\t', '.\n\n'))
+        self._trans.setText(card.translation.replace('\t', '\n'))
         if card.examples is not None:
             label = ''
             for ig, trans in card.examples:
-                print(ig)
-                print(trans)
                 label += '<span style="font-weight:bold;">' + ig + '</span><br>'
                 label += trans
             self._examples.setText(label)
-        #self._examples.setText('\n'.join(card.examples))
         self.update()
 
     def keyPressEvent(self, a0: QtGui.QKeyEvent) -> None:
